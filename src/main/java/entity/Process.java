@@ -22,9 +22,9 @@ public class Process {
     String inputs;
     String works;
     String outputs;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stage_id")
+    @JoinColumn(name = "stage_id", nullable = false)
     Stage stage;
 
     public Integer getProcess_id() {

@@ -21,7 +21,7 @@ public class Stage {
 
     String name;
 
-    @OneToMany(mappedBy = "process")
+    @OneToMany(fetch = FetchType.LAZY) //, mappedBy = "Process"
     List<Process> process;
 
     @ManyToOne(fetch = FetchType.LAZY)

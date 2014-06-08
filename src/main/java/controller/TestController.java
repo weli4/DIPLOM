@@ -1,6 +1,7 @@
 
 package controller;
 
+import entity.Project;
 import entity.Stage;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +14,18 @@ public class TestController {
     public ModelAndView test()
     {
         ModelAndView model=new ModelAndView("test");
+        
+        Project pr = new Project();
+        pr.setDescription("ffff");
+        pr.setName("aaaa");
+        
         StageDao dao=new StageDao();
         Stage stage=new Stage();
+        stage.setName("koko");
         stage.setName("Стадия");
+        stage.setProject(pr);
         dao.add(stage);
+        
         return model;
     }
      @RequestMapping("/workspace")
