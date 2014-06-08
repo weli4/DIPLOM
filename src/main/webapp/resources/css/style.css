@@ -1,0 +1,142 @@
+html,body{
+    padding:0;
+    margin:0;
+    height:100%;
+    width:100%;
+}
+.right-column, .center-column, .left-column, .header, .process, .properties, .footer{
+    border:solid 1px lightgray;
+}
+.right-column, .center-column, .left-column{
+    height:100%;
+    min-height:100%;
+
+}
+.right-column{
+
+}
+.center-column{
+    overflow-x: auto;
+    overflow-y: auto;
+    white-space: nowrap;
+}
+.left-column{
+    padding:0px;
+}
+.container{
+    height: 100%;
+    width: 100%
+}
+.header{
+    height: 40px;
+    width: 100%;
+
+}
+.footer{
+    height: 40px;
+    width: 100%;
+}
+.fill{
+    margin-top: -80px;
+    padding-top: 80px;
+
+    width:100%;
+    height:100%;
+    min-height:100%;
+}
+.processes, .properties{
+    height:50%;
+    width:100%;
+    overflow-y: auto;
+    white-space:normal !important;
+}
+.inner{
+    padding-left:10px;
+}
+.process{
+    cursor: pointer;
+    width:100px;
+    border: 1px lightgray solid;
+    border-radius:4px;
+    overflow:hidden;
+    white-space:normal !important;
+}
+.stage{
+    margin-bottom:3px;
+
+
+}
+.worked.stage:hover{
+    background-color: rgba(50,250,50,0.1) ;
+}
+.active{
+    background-color: rgba(50,250,50,0.3) ;
+}
+.stage .fa{
+    margin-left:10px;
+    cursor:pointer;
+    position:relative;
+}
+.model .fa{
+
+    cursor:pointer;
+    position:relative;
+}
+.stage span{
+    text-align:center;
+    display:block;
+    border-bottom: 1px solid #d3d3d3;
+}
+.checkpoint{
+    margin-left:-10px;
+    margin-right:10px;
+    display:inline-block;
+    height:20px;
+}
+.worked{
+    display: inline-block;
+    margin-left:0px;
+    margin-top:50px;
+    border:1px solid #d3d3d3;
+}
+.worked .fa-times-circle{
+    position:relative;
+    top:-40px;
+
+}
+.results{
+    display:inline-table;
+}
+.hidden{
+    display:none !important;
+}
+.info{
+    display:inline-table;
+}
+.results{
+    margin-left:10px;
+    display:inline-table;
+}
+.results .data{
+    display:none;
+    margin-top:10px;
+}
+.results span{
+    cursor: pointer;
+    font-size:10px;
+    text-decoration: underline;
+}
+.stage_process{
+    min-height:50px;
+    height:50px;
+    min-width: 120px;
+    border: 1px dotted darkblue;
+    display:inherit;
+}
+.fa.fa-folder{
+    cursor:pointer;
+    color:#2d6ca2;
+}
+
+
+
