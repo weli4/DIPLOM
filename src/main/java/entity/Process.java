@@ -1,5 +1,6 @@
 package entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -23,7 +24,7 @@ public class Process {
     String works;
     String outputs;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
     @JoinColumn(name = "stage_id", nullable = false)
     Stage stage;
 

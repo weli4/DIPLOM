@@ -5,6 +5,7 @@ import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -24,7 +25,7 @@ public class Stage {
     @OneToMany(fetch = FetchType.LAZY) //, mappedBy = "Process"
     List<Process> process;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
     @JoinColumn(name = "project_id")
     Project project;
 

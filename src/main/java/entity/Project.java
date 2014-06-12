@@ -20,7 +20,7 @@ public class Project {
     private String name;
     private String description;
 
-    @OneToMany(fetch = FetchType.LAZY)//(mappedBy = "Stage")
+    @OneToMany(fetch = FetchType.LAZY)// @OneToMany(fetch = FetchType.LAZY)
     private List<Stage> stages;
 
     public Integer getProject_id() {

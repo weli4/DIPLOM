@@ -4,6 +4,7 @@ import entity.Project;
 import entity.Stage;
 import java.util.List;
 import javax.transaction.Transactional;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import persist.ProjectDao;
 
@@ -11,16 +12,19 @@ import persist.ProjectDao;
 @Service
 public class DBServiceImpl implements IDBService{
 
-    @Transactional //wtf
+    @Transactional
     @Override
     public List<Project> getAllProjects() {
         ProjectDao prjDao = new ProjectDao();
         List<Project> projects = prjDao.getAll(); // инициализация проектов
         for (Project pr:projects){
-            List<Stage> stages = pr.getStages(); // инициализация стадий текущего проекта
+            Hibernate.initialize(pr.getStages()); // инициализация стадий текущего проекта
+            List<Stage> stages = pr.getStages();
             pr.setStages(stages);
+            System.out.println("stages:"+stages.size()+"\t"+stages);
             for (Stage st:stages){
-                List<entity.Process> procs = st.getProcess(); // инициализация процессов текущей стадии
+                Hibernate.initialize(st.getProcess()); // инициализация процессов текущей стадии
+                List<entity.Process> procs = st.getProcess(); 
                 st.setProcess(procs);
             }
         }
