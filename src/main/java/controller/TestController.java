@@ -11,6 +11,7 @@ import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import persist.ProjectDao;
 import persist.StageDao;
 import service.DBServiceImpl;
 import xlsparser.XLSParser;
@@ -34,8 +35,9 @@ public class TestController {
         dao.add(stage);
         */
         //Project pr = RandomEntity.getRandomProject(4, 5);
-        DBServiceImpl db = new DBServiceImpl();
-        List<Project> projects = db.getAllProjects();
+        //DBServiceImpl db = new DBServiceImpl();
+        ProjectDao pDao = new ProjectDao();
+        List<Project> projects = pDao.getAll();//db.getAllProjects();
         
         
         for (Project prj:projects){

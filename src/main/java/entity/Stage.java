@@ -25,7 +25,7 @@ public class Stage {
     @OneToMany(fetch = FetchType.LAZY) //, mappedBy = "Process"
     List<Process> process;
 
-    @ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
+    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     Project project;
 

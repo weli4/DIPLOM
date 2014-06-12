@@ -3,7 +3,6 @@ package service;
 import entity.Project;
 import entity.Stage;
 import java.util.List;
-import javax.transaction.Transactional;
 import org.hibernate.Hibernate;
 import org.springframework.stereotype.Service;
 import persist.ProjectDao;
@@ -12,7 +11,6 @@ import persist.ProjectDao;
 @Service
 public class DBServiceImpl implements IDBService{
 
-    @Transactional
     @Override
     public List<Project> getAllProjects() {
         ProjectDao prjDao = new ProjectDao();

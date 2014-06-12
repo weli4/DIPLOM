@@ -1,18 +1,44 @@
 package persist;
 
 import entity.Process;
+import java.util.ArrayList;
 import java.util.List;
-import javax.transaction.Transactional;
+import org.hibernate.Session;
+import util.HibernateUtil;
 
 public class ProcessDao extends AbstractDAO<Process> {
 
-    @Transactional
-    public Process getById(Integer id) {
-        return super.getById(id, Process.class);
+    @Override
+    protected Process getById(Integer id) {
+        Session session = null;
+        Process object = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            object = (Process) session.load(Process.class, id);
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return object;
     }
 
-    @Transactional
-    public List getAll() {
-        return super.getAll(Process.class);
+    @Override
+    protected List<Process> getAll() {
+        Session session = null;
+        List<Process> objects = new ArrayList<Process>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            objects = session.createCriteria(Process.class).list();
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        return objects;
     }
 }
