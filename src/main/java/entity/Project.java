@@ -2,6 +2,7 @@ package entity;
 
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,7 +20,7 @@ public class Project {
     private String name;
     private String description;
 
-    @OneToMany(mappedBy = "stage")
+    @OneToMany(fetch = FetchType.LAZY)//(mappedBy = "Stage")
     private List<Stage> stages;
 
     public Integer getProject_id() {

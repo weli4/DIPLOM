@@ -1,6 +1,7 @@
 
 package controller;
 
+import entity.Project;
 import entity.Stage;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,10 +18,18 @@ public class TestController {
     public ModelAndView test()
     {
         ModelAndView model=new ModelAndView("test");
+        
+        Project pr = new Project();
+        pr.setDescription("ffff");
+        pr.setName("aaaa");
+        
         StageDao dao=new StageDao();
         Stage stage=new Stage();
+        stage.setName("koko");
         stage.setName("Стадия");
+        stage.setProject(pr);
         dao.add(stage);
+        
         return model;
     }
      @RequestMapping("/workspace")
