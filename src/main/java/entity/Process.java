@@ -25,7 +25,7 @@ public class Process {
     String outputs;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "stage_id", nullable = false)
+    @JoinColumn(name = "stage_id")
     Stage stage;
 
     public Integer getProcess_id() {

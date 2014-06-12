@@ -4,29 +4,55 @@ import entity.Project;
 import entity.Stage;
 import java.util.ArrayList;
 import java.util.List;
-import javax.transaction.Transactional;
-import org.hibernate.Hibernate;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
 public class ProjectDao extends AbstractDAO<Project> {
 
     public Project getById(Integer id) {
-        return super.getById(id, Project.class);
+        Session session = null;
+        List projects = new ArrayList<Stage>();
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            String q = "from entity.Project where project_id = " + id;
+            Query query = session.createQuery(q);
+            projects = (List<Project>) query.list();
+            session.getTransaction().commit();
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+        if (projects.size() > 0) {
+            StageDao stDao = new StageDao();
+            ProcessDao prcDao = new ProcessDao();
+            Project project = (Project) projects.get(0);
+            project.setStages(stDao.getById(project.getProject_id())); // инициализация стадий
+            for (Stage st : project.getStages()) {
+                st.setProcess(prcDao.getById(st.getStage_id())); // инициализация процессов
+            }
+            return project;
+        }
+        return null;
     }
 
     public List getAll() {
         Session session = null;
         List<Project> objects = new ArrayList<Project>();
         try {
+            StageDao stDao = new StageDao();
+            ProcessDao prcDao = new ProcessDao();
             session = HibernateUtil.getSessionFactory().openSession();
             objects = (List<Project>) session.createCriteria(Project.class).list();
             for (Project pr : objects) {
-                pr = (Project) session.merge(pr);
-                Hibernate.initialize(pr.getStages()); // инициализация стадий текущего проекта          
+
+                pr.setStages(stDao.getById(pr.getProject_id())); // инициализация стадий
                 for (Stage st : pr.getStages()) {
-                    Hibernate.initialize(st.getProcess());
+                    st.setProcess(prcDao.getById(st.getStage_id())); // инициализация процессов
                 }
+
             }
         } catch (Exception e) {
             System.err.println(e);

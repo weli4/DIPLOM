@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import persist.ProcessDao;
 import persist.ProjectDao;
 import persist.StageDao;
 import service.DBServiceImpl;
@@ -26,32 +27,33 @@ public class TestController {
     public ModelAndView test() {
         ModelAndView model = new ModelAndView("test");
 
-      /* Project pr = new Project();
-        pr.setDescription("ffff");
-        pr.setName("aaaa");
-
-        StageDao dao = new StageDao();
-        Stage stage = new Stage();
-        stage.setName("koko");
-        stage.setName("Стадия");
-        stage.setProject(pr);
-        dao.add(stage);
-        */
-        Project pr = RandomEntity.getRandomProject(4, 5);
-        ProjectDao pDao = new ProjectDao();
-        pDao.add(pr);
-   
+        //service.addProject(RandomEntity.getRandomProject(3, 5));
+        
         List<Project> projects = service.getAllProjects();
 
-        for (Project prj : projects) {
-            System.out.println("Project:" + prj.getName());
+        //for (Project prj : projects) {
+        Project prj = service.getProject(23);
+            System.out.println("\n\nProject:" + prj.getName() + "\tid:"+prj.getProject_id());
             for (Stage st : prj.getStages()) {
-                System.out.println("Stage:" + st.getName());
-                for (Process prc : st.getProcess()) {
-                    System.out.println("Process:" + prc.getName());
+                System.out.println("\tStage:" + st.getName());
+                for (Process proc : st.getProcess()) {
+                    System.out.println("\t\tProcess:" + proc.getName());
                 }
             }
-        }
+        //}
+        
+        //service.deleteProject(projects.get(0).getProject_id());
+        /*
+        projects = service.getAllProjects(); 
+        for (Project prj : projects) {
+            System.out.println("\n\nProject:" + prj.getName() + "\tid:"+prj.getProject_id());
+            for (Stage st : prj.getStages()) {
+                System.out.println("\tStage:" + st.getName());
+                for (Process proc : st.getProcess()) {
+                    System.out.println("\t\tProcess:" + proc.getName());
+                }
+            }
+        }*/
 
         return model;
     }

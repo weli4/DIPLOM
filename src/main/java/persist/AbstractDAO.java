@@ -2,14 +2,12 @@ package persist;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.transaction.Transactional;
 import org.hibernate.Session;
 import util.HibernateUtil;
 
 public abstract class AbstractDAO<E> {
 
-
-    public void add(E object){
+    public void add(E object) {
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
@@ -25,7 +23,7 @@ public abstract class AbstractDAO<E> {
         }
     }
 
-    protected E getById(Integer id, Class entityClass){
+    protected E getById(Integer id, Class entityClass) {
         Session session = null;
         E object = null;
         try {
@@ -41,7 +39,7 @@ public abstract class AbstractDAO<E> {
         return object;
     }
 
-    protected List<E> getAll(Class entityClass){
+    protected List<E> getAll(Class entityClass) {
         Session session = null;
         List<E> objects = new ArrayList<E>();
         try {
@@ -57,7 +55,7 @@ public abstract class AbstractDAO<E> {
         return objects;
     }
 
-    public void delete(E object){
+    public void delete(E object) {
         Session session = null;
         try {
             session = HibernateUtil.getSessionFactory().openSession();
