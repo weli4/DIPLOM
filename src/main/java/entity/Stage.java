@@ -22,10 +22,10 @@ public class Stage {
 
     String name;
 
-    @OneToMany(fetch = FetchType.LAZY) //, mappedBy = "Process"
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "process_id") //, mappedBy = "Process"
     List<Process> process;
 
-    @ManyToOne(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     Project project;
 

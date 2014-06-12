@@ -24,7 +24,7 @@ public class Process {
     String works;
     String outputs;
 
-    @ManyToOne(cascade={CascadeType.ALL},fetch=FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stage_id", nullable = false)
     Stage stage;
 

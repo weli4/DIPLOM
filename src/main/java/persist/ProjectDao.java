@@ -12,21 +12,7 @@ import util.HibernateUtil;
 public class ProjectDao extends AbstractDAO<Project> {
 
     public Project getById(Integer id) {
-        Session session = null;
-        Project object = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            object = (Project) session.load(Project.class, id);
-            Stage st = (Stage) session.merge(object.getStages());
-            Hibernate.initialize(object.getStages());
-        } catch (Exception e) {
-            System.err.println(e);
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-        return object;
+        return super.getById(id, Project.class);
     }
 
     public List getAll() {
@@ -34,9 +20,13 @@ public class ProjectDao extends AbstractDAO<Project> {
         List<Project> objects = new ArrayList<Project>();
         try {
             session = HibernateUtil.getSessionFactory().openSession();
-            objects = session.createCriteria(Project.class).list();
-            for (Project st : objects) {
-                Hibernate.initialize(st.getStages());
+            objects = (List<Project>) session.createCriteria(Project.class).list();
+            for (Project pr : objects) {
+                pr = (Project) session.merge(pr);
+                Hibernate.initialize(pr.getStages()); // инициализация стадий текущего проекта          
+                for (Stage st : pr.getStages()) {
+                    Hibernate.initialize(st.getProcess());
+                }
             }
         } catch (Exception e) {
             System.err.println(e);
