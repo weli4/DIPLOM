@@ -25,24 +25,6 @@ public abstract class AbstractDAO<E> {
         }
     }
 
-
-    public void update(E object){
-        Session session = null;
-        try {
-            session = HibernateUtil.getSessionFactory().openSession();
-            session.beginTransaction();
-            session.update(object);
-            session.getTransaction().commit();
-        } catch (Exception e) {
-            System.err.println(e);
-        } finally {
-            if (session != null && session.isOpen()) {
-                session.close();
-            }
-        }
-    }
-
-
     protected E getById(Integer id, Class entityClass){
         Session session = null;
         E object = null;
