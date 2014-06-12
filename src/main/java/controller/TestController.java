@@ -5,12 +5,15 @@ import entity.Project;
 import entity.RandomEntity;
 import entity.Stage;
 import entity.Process;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import persist.StageDao;
 import service.DBServiceImpl;
+import xlsparser.XLSParser;
 
 @Controller
 public class TestController {
@@ -50,6 +53,10 @@ public class TestController {
     public ModelAndView ws()
     {
         ModelAndView model=new ModelAndView("workspace");  
+        XLSParser.init("E://1.xls").printMe();
+        HashMap map=XLSParser.init("E://1.xls").getOuts();
+        ArrayList<entity.Process> processes=XLSParser.init("E://1.xls").getProcesses();
+        model.addObject("processes", map);
         return model;
     }
     

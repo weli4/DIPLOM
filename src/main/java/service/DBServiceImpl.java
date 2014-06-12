@@ -6,13 +6,12 @@ import java.util.List;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import persist.ProjectDao;
-import persist.StageDao;
 
 
 @Service
 public class DBServiceImpl implements IDBService{
 
-    @Transactional
+    @Transactional //wtf
     @Override
     public List<Project> getAllProjects() {
         ProjectDao prjDao = new ProjectDao();
