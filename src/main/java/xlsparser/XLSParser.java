@@ -1,11 +1,12 @@
 package xlsparser;
 
+import entity.Process;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import entity.Process;
 import java.util.Iterator;
+import java.util.TreeMap;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -18,12 +19,14 @@ public class XLSParser {
     private ArrayList<Process> processes = null;
     private HashMap<String, String> processToStageOut = null;
     private ArrayList<String> stageOutputs = new ArrayList();
+    private TreeMap<String, ArrayList<Process>> procGroups = null;
 
     private XLSParser() {
     }
 
     /**
-     *  инициализация парсера
+     * инициализация парсера
+     *
      * @param path абсолютный путь к .xls описанию стадии
      * @return
      */
@@ -46,7 +49,9 @@ public class XLSParser {
         int row = 0;
         int col = 0;
         String procOutputs = null;
-        parser.processes = new ArrayList<Process>();
+        String curGroup = null;
+        parser.procGroups = new TreeMap();
+        //parser.processes = new ArrayList<Process>();
         parser.processToStageOut = new HashMap<String, String>();
         while (it.hasNext()) {
             col = 0;
@@ -67,6 +72,14 @@ public class XLSParser {
                     }
                     col++;
                     continue;
+                }
+
+                if (col == 0 && val != null && !val.isEmpty() && val.contains("6.")) {
+                    if (parser.processes != null) {
+                        parser.procGroups.put(curGroup, parser.processes);
+                    }
+                    curGroup = val;
+                    parser.processes = new ArrayList<Process>();
                 }
 
                 if (col == 0 && val != null && !val.isEmpty() && !val.contains("Выходы") && !val.contains(".")) {
@@ -106,7 +119,6 @@ public class XLSParser {
                         }
                     }
                 }
-
                 col++;
             }
             row++;
@@ -115,20 +127,12 @@ public class XLSParser {
             parser.processes.add(proc);
         }
 
-        if (DEBUG) {
-            System.out.println("stageOutputs:");
-            for (String str : parser.stageOutputs) {
-                System.out.println(str);
-            }
+        if (parser.processes != null) {
+            parser.procGroups.put(curGroup, parser.processes);
+        }
 
-            System.out.println("processes:");
-            for (Process pr : parser.processes) {
-                System.out.println(pr.getName() + "\n\toutputs:");
-                System.out.println("\t\t" + pr.getOutputs());
-                if (parser.processToStageOut.containsKey(pr.getName())) {
-                    System.out.println("\t\tstageOuts:" + parser.processToStageOut.get(pr.getName()));
-                }
-            }
+        if (DEBUG) {
+            instance.printMe();
         }
         instance = parser;
         return parser;
@@ -143,7 +147,8 @@ public class XLSParser {
     }
 
     /**
-     *  реинициализация парсера и выдача процессов
+     * реинициализация парсера и выдача процессов
+     *
      * @param абсолютный путь к .xls описанию стадии
      * @return список всех процессов
      */
@@ -153,8 +158,9 @@ public class XLSParser {
     }
 
     /**
-     *  
-     * @return HashMap[название_процесса,перечень_выходов_стадии], выходы стадии разделены символом ";"
+     *
+     * @return HashMap[название_процесса,перечень_выходов_стадии], выходы стадии
+     * разделены символом ";"
      */
     public HashMap<String, String> getOuts() {
         return processToStageOut;
@@ -162,8 +168,10 @@ public class XLSParser {
 
     /**
      * реинициализация парсера и выдача выходов стадии
+     *
      * @param path абсолютный путь к .xls описанию стадии
-     * @return HashMap[название_процесса,перечень_выходов_стадии], выходы стадии разделены символом ";"
+     * @return HashMap[название_процесса,перечень_выходов_стадии], выходы стадии
+     * разделены символом ";"
      */
     public HashMap<String, String> getOuts(String path) {
         init(path);
@@ -171,7 +179,7 @@ public class XLSParser {
     }
 
     /**
-     *  печать содержимого парсера в консоль
+     * печать содержимого парсера в консоль
      */
     public void printMe() {
         System.out.println("stageOutputs:");
@@ -179,12 +187,16 @@ public class XLSParser {
             System.out.println(str);
         }
 
-        System.out.println("processes:");
-        for (Process pr : processes) {
-            System.out.println(pr.getName() + "\n\toutputs:");
-            System.out.println("\t\t" + pr.getOutputs());
-            if (processToStageOut.containsKey(pr.getName())) {
-                System.out.println("\t\tstageOuts:" + processToStageOut.get(pr.getName()));
+        System.out.println("\n\nprocesses:");
+        for (String group : procGroups.keySet()) {
+            System.out.println("Group: " + group + "\tsize:"+procGroups.get(group).size()+"\n");
+            ArrayList<Process> processes = procGroups.get(group);
+            for (Process pr : processes) {
+                System.out.println(pr.getName() + "\n\toutputs:");
+                System.out.println("\t\t" + pr.getOutputs());
+                if (processToStageOut.containsKey(pr.getName())) {
+                    System.out.println("\t\tstageOuts:" + processToStageOut.get(pr.getName()));
+                }
             }
         }
 
