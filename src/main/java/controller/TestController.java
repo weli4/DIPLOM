@@ -67,5 +67,10 @@ public class TestController {
         model.addObject("processes", map);
         return model;
     }
+    @RequestMapping("/result")
+    public ModelAndView result(){
+          ModelAndView model = new ModelAndView("result");
+          return model;
+    }
 
 }
