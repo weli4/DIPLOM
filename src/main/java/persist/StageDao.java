@@ -11,20 +11,20 @@ public class StageDao extends AbstractDAO<Stage> {
 
     public List<Stage> getById(Integer project_id) {
         Session session = null;
-        List processes = new ArrayList<Stage>();
+        List stages = new ArrayList<Stage>();
         try {
             session = HibernateUtil.getSessionFactory().openSession();
             session.beginTransaction();
             String q = "from entity.Stage where project_id = " + project_id;
             Query query = session.createQuery(q);
-            processes = (List<Stage>) query.list();
+            stages = (List<Stage>) query.list();
             session.getTransaction().commit();
         } finally {
             if (session != null && session.isOpen()) {
                 session.close();
             }
         }
-        return (List<Stage>) processes;
+        return (List<Stage>) stages;
     }
 
     public List getAll() {
