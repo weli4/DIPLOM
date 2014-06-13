@@ -75,6 +75,11 @@ public class TestController {
         model.addObject("user", curUser);
         return model;
     }
+    @RequestMapping("/result")
+    public ModelAndView result(){
+          ModelAndView model = new ModelAndView("result");
+          return model;
+    }
 
     @RequestMapping(value = "/login.form", method = RequestMethod.POST)
     public ModelAndView login(String uname, String pwd) {
