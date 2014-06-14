@@ -6,12 +6,7 @@
 <a href="workspace" accesskey=""> Workspace </a>
 <br/>
 <a href="saati" >Saati</a>
-<form action="login" method="POST">
-    username<input type="text" name="username"/>
-    password<input type="password" name="passwor"/>
-    <button type="submit">login</button>
-</form>
-
-
+<br/>
+Logon as: ${user.username}
 
 <%@ include file="/WEB-INF/jsp/footer.jsp" %>
