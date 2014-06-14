@@ -4,6 +4,7 @@ import entity.Process;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.TreeMap;
@@ -189,7 +190,7 @@ public class XLSParser {
 
         System.out.println("\n\nprocesses:");
         for (String group : getProcGroups().keySet()) {
-            System.out.println("Group: " + group + "\tsize:"+getProcGroups().get(group).size()+"\n");
+            System.out.println("Group: " + group + "\tsize:" + getProcGroups().get(group).size() + "\n");
             ArrayList<Process> processes = getProcGroups().get(group);
             for (Process pr : processes) {
                 System.out.println(pr.getName() + "\n\toutputs:");
@@ -207,6 +208,19 @@ public class XLSParser {
      */
     public HashMap<String, String> getProcessToStageOut() {
         return processToStageOut;
+    }
+
+    public HashMap<String, ArrayList<String>> getProcessToStageOutAsList() {
+        if (processToStageOut == null) {
+            return null;
+        }
+        HashMap pts = new HashMap();
+        for (String key : processToStageOut.keySet()) {
+            ArrayList<String> procs = new ArrayList<String>();
+            procs.addAll(Arrays.asList(processToStageOut.get(key).split(";")));
+            pts.put(key, procs);
+        }
+        return pts;
     }
 
     /**
@@ -243,5 +257,5 @@ public class XLSParser {
     public void setProcGroups(TreeMap<String, ArrayList<Process>> procGroups) {
         this.procGroups = procGroups;
     }
-    
+
 }
