@@ -28,33 +28,31 @@ public class TestController {
         ModelAndView model = new ModelAndView("test");
 
         //service.addProject(RandomEntity.getRandomProject(3, 5));
-        
         List<Project> projects = service.getAllProjects();
 
         //for (Project prj : projects) {
-        Project prj = service.getProject(23);
-            System.out.println("\n\nProject:" + prj.getName() + "\tid:"+prj.getProject_id());
-            for (Stage st : prj.getStages()) {
-                System.out.println("\tStage:" + st.getName());
-                for (Process proc : st.getProcess()) {
-                    System.out.println("\t\tProcess:" + proc.getName());
-                }
-            }
+        // Project prj = service.getProject(21);
+        //  System.out.println("\n\nProject:" + prj.getName() + "\tid:" + prj.getProject_id());
+        // for (Stage st : prj.getStages()) {
+        //     System.out.println("\tStage:" + st.getName());
+        //     for (Process proc : st.getProcess()) {
+        //         System.out.println("\t\tProcess:" + proc.getName());
+        //     }
+        // }
         //}
-        
+        HashMap map = XLSParser.init("E://1.xls").getProcessToStageOut();
         //service.deleteProject(projects.get(0).getProject_id());
         /*
-        projects = service.getAllProjects(); 
-        for (Project prj : projects) {
-            System.out.println("\n\nProject:" + prj.getName() + "\tid:"+prj.getProject_id());
-            for (Stage st : prj.getStages()) {
-                System.out.println("\tStage:" + st.getName());
-                for (Process proc : st.getProcess()) {
-                    System.out.println("\t\tProcess:" + proc.getName());
-                }
-            }
-        }*/
-
+         projects = service.getAllProjects(); 
+         for (Project prj : projects) {
+         System.out.println("\n\nProject:" + prj.getName() + "\tid:"+prj.getProject_id());
+         for (Stage st : prj.getStages()) {
+         System.out.println("\tStage:" + st.getName());
+         for (Process proc : st.getProcess()) {
+         System.out.println("\t\tProcess:" + proc.getName());
+         }
+         }
+         }*/
         return model;
     }
 
@@ -67,10 +65,28 @@ public class TestController {
         model.addObject("processes", map);
         return model;
     }
+
     @RequestMapping("/result")
-    public ModelAndView result(){
-          ModelAndView model = new ModelAndView("result");
-          return model;
+    public ModelAndView result() {
+        ModelAndView model = new ModelAndView("result");
+        Project prj = service.getProject(21);
+
+        for (int i = 0; i < prj.getStages().size(); i++) {
+            Stage stage = prj.getStages().get(i);
+            HashMap map = XLSParser.init("E://" + (i + 1) + ".xls").getProcessToStageOut();
+            for (int j = 0; j < stage.getProcess().size(); j++) {
+                Process process = stage.getProcess().get(j);
+
+                if (map.containsKey(process.getName())) {
+                    process.setT(true);
+                    process.setOutputs((String)map.get(process.getName().split(";")));
+                } else {
+                    process.setT(false);
+                }
+            }
+        }
+        model.addObject("project", prj);
+        return model;
     }
 
 }

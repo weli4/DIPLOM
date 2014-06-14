@@ -50,9 +50,9 @@ public class XLSParser {
         int col = 0;
         String procOutputs = null;
         String curGroup = null;
-        parser.procGroups = new TreeMap();
+        parser.setProcGroups((TreeMap<String, ArrayList<Process>>) new TreeMap());
         //parser.processes = new ArrayList<Process>();
-        parser.processToStageOut = new HashMap<String, String>();
+        parser.setProcessToStageOut(new HashMap<String, String>());
         while (it.hasNext()) {
             col = 0;
             Row curRow = it.next();
@@ -68,7 +68,7 @@ public class XLSParser {
 
                 if (row == 0) {
                     if (val != null && !val.isEmpty()) {
-                        parser.stageOutputs.add(val);
+                        parser.getStageOutputs().add(val);
                     }
                     col++;
                     continue;
@@ -76,7 +76,7 @@ public class XLSParser {
 
                 if (col == 0 && val != null && !val.isEmpty() && val.contains("6.")) {
                     if (parser.processes != null) {
-                        parser.procGroups.put(curGroup, parser.processes);
+                        parser.getProcGroups().put(curGroup, parser.processes);
                     }
                     curGroup = val;
                     parser.processes = new ArrayList<Process>();
@@ -107,15 +107,15 @@ public class XLSParser {
                 if (row != 0 && proc != null && val != null && val.length() == 1 && val.toLowerCase().contains("x")) {
 
                     String procName = proc.getName();
-                    String curOut = parser.stageOutputs.get(cell.getColumnIndex() - 9);
+                    String curOut = parser.getStageOutputs().get(cell.getColumnIndex() - 9);
                     String check = null;
 
                     if (!parser.processToStageOut.containsKey(procName)) {
-                        parser.processToStageOut.put(procName, curOut);
+                        parser.getProcessToStageOut().put(procName, curOut);
                     } else {
-                        check = parser.processToStageOut.get(procName);
+                        check = parser.getProcessToStageOut().get(procName);
                         if (!check.contains(curOut)) {
-                            parser.processToStageOut.put(procName, check + ";" + curOut);
+                            parser.getProcessToStageOut().put(procName, check + ";" + curOut);
                         }
                     }
                 }
@@ -128,7 +128,7 @@ public class XLSParser {
         }
 
         if (parser.processes != null) {
-            parser.procGroups.put(curGroup, parser.processes);
+            parser.getProcGroups().put(curGroup, parser.processes);
         }
 
         if (DEBUG) {
@@ -163,7 +163,7 @@ public class XLSParser {
      * разделены символом ";"
      */
     public HashMap<String, String> getOuts() {
-        return processToStageOut;
+        return getProcessToStageOut();
     }
 
     /**
@@ -175,7 +175,7 @@ public class XLSParser {
      */
     public HashMap<String, String> getOuts(String path) {
         init(path);
-        return processToStageOut;
+        return getProcessToStageOut();
     }
 
     /**
@@ -183,22 +183,65 @@ public class XLSParser {
      */
     public void printMe() {
         System.out.println("stageOutputs:");
-        for (String str : stageOutputs) {
+        for (String str : getStageOutputs()) {
             System.out.println(str);
         }
 
         System.out.println("\n\nprocesses:");
-        for (String group : procGroups.keySet()) {
-            System.out.println("Group: " + group + "\tsize:"+procGroups.get(group).size()+"\n");
-            ArrayList<Process> processes = procGroups.get(group);
+        for (String group : getProcGroups().keySet()) {
+            System.out.println("Group: " + group + "\tsize:"+getProcGroups().get(group).size()+"\n");
+            ArrayList<Process> processes = getProcGroups().get(group);
             for (Process pr : processes) {
                 System.out.println(pr.getName() + "\n\toutputs:");
                 System.out.println("\t\t" + pr.getOutputs());
-                if (processToStageOut.containsKey(pr.getName())) {
-                    System.out.println("\t\tstageOuts:" + processToStageOut.get(pr.getName()));
+                if (getProcessToStageOut().containsKey(pr.getName())) {
+                    System.out.println("\t\tstageOuts:" + getProcessToStageOut().get(pr.getName()));
                 }
             }
         }
 
     }
+
+    /**
+     * @return the processToStageOut
+     */
+    public HashMap<String, String> getProcessToStageOut() {
+        return processToStageOut;
+    }
+
+    /**
+     * @param processToStageOut the processToStageOut to set
+     */
+    public void setProcessToStageOut(HashMap<String, String> processToStageOut) {
+        this.processToStageOut = processToStageOut;
+    }
+
+    /**
+     * @return the stageOutputs
+     */
+    public ArrayList<String> getStageOutputs() {
+        return stageOutputs;
+    }
+
+    /**
+     * @param stageOutputs the stageOutputs to set
+     */
+    public void setStageOutputs(ArrayList<String> stageOutputs) {
+        this.stageOutputs = stageOutputs;
+    }
+
+    /**
+     * @return the procGroups
+     */
+    public TreeMap<String, ArrayList<Process>> getProcGroups() {
+        return procGroups;
+    }
+
+    /**
+     * @param procGroups the procGroups to set
+     */
+    public void setProcGroups(TreeMap<String, ArrayList<Process>> procGroups) {
+        this.procGroups = procGroups;
+    }
+    
 }

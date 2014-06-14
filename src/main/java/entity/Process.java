@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "processes")
@@ -23,6 +24,8 @@ public class Process {
     String inputs;
     String works;
     String outputs;
+    @Transient
+    private Boolean t;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "stage_id")
@@ -83,4 +86,12 @@ public class Process {
     public void setStage(Stage stage) {
         this.stage = stage;
     }
+    public Boolean getT() {
+        return t;
+    }
+
+    public void setT(Boolean t) {
+        this.t = t;
+    }
+    
 }
