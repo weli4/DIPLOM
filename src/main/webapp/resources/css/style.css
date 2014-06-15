@@ -137,6 +137,17 @@ html,body{
     cursor:pointer;
     color:#2d6ca2;
 }
+.out{
+    width:600px;
+}
+div.ui-tooltip {
+    max-width: 600px;
+    z-index:1000;
+}
 
+.ui-tooltip-content {
+    z-index: 1000;
+    background-color:white;
+}
 
 

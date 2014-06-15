@@ -1,5 +1,6 @@
 package entity;
 
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -24,6 +25,8 @@ public class Process {
     String inputs;
     String works;
     String outputs;
+    @Transient
+    private List<String> outputList;
     @Transient
     private Boolean t;
 
@@ -92,6 +95,14 @@ public class Process {
 
     public void setT(Boolean t) {
         this.t = t;
+    }
+
+    public List<String> getOutputList() {
+        return outputList;
+    }
+
+    public void setOutputList(List<String> outputList) {
+        this.outputList = outputList;
     }
     
 }

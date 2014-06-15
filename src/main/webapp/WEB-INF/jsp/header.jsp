@@ -16,6 +16,6 @@
     <div class="row header">
         <button type="button" class="btn btn-primary">Модель ЖЦ</button>
         <button type="button" class="btn btn-primary">Выбор Альтернатив</button>
-        <a href="logout.htm">Logout</a>
+        <a href="logout.htm" class="btn btn-primary">Logout</a>
     </div>
 

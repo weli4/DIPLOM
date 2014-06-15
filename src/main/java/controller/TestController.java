@@ -83,19 +83,24 @@ public class TestController {
 
         for (int i = 0; i < prj.getStages().size(); i++) {
             Stage stage = prj.getStages().get(i);
-            HashMap map = XLSParser.init("E://" + (i + 1) + ".xls").getProcessToStageOut();
+            stage.setOutputs((List)XLSParser.init("E://" + (i + 1) + ".xls").getStageOutputs());
+            HashMap map = XLSParser.init("E://" + (i + 1) + ".xls").getProcessToStageOutAsList();
+          
             for (int j = 0; j < stage.getProcess().size(); j++) {
                 Process process = stage.getProcess().get(j);
 
                 if (map.containsKey(process.getName())) {
                     process.setT(true);
-                    process.setOutputs((String)map.get(process.getName().split(";")));
+                    process.setOutputList((List)map.get(process.getName()));
                 } else {
                     process.setT(false);
                 }
             }
+            
         }
+        
         model.addObject("project", prj);
+        
         return model;
     }
 

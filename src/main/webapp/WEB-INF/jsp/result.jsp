@@ -12,7 +12,6 @@
 
                 <div class="stage_process">
                     <c:forEach items="${stage.process}" var="process">
-
                         <div class="process" style="<c:if test="${process.t}">background-color:green</c:if>
                              <c:if test="${not process.t}">background-color:red</c:if>">
                             ${process.name}
@@ -22,26 +21,44 @@
                         </div>
                     </c:forEach>
                     <div class="outs">
-                        <c:forEach items="${stage.process}" var="process">
-                            ${process.name}-${process.outputs} <br/>
-                            <c:forEach items="${process.outputs}" var="out">
-                                ${out} <br/>
-                            </c:forEach>
-                        </c:forEach>
-                    </div>
-
-
-                    <div class="results">
-                        <span class="show">Результаты</span>
-                        <div class="data">
-                            <p>Результат1</p>
-                            <p>Результат2</p>
-                            <p>Результат3</p>
-                            <p>Результат4</p>
+                        <div class="row" style="font-size:70%">
+                            <i style="font-size:130%; position:relative; right:20px; cursor:pointer" class="close fa fa-times-circle pull-right"></i>
+                            <div class="col-md-6">
+                                <c:forEach items="${stage.process}" var="process">
+                                    <p style="<c:if test="${process.t}">color:green</c:if>
+                                       <c:if test="${not process.t}">color:red</c:if>"><strong>${process.name}</strong></p>
+                                            <c:forEach items="${process.outputList}" var="out">
+                                        <div style="positinon:relative; right:20px;">-${out}</div>
+                                    </c:forEach>
+                                </c:forEach>
+                            </div>
+                            <div class="col-md-6">
+                                <strong>Выходы стадии</strong>
+                                <c:forEach items="${stage.outputs}" var="out">
+                                    <div style="positinon:relative; right:20px;">-${out}</div>
+                                </c:forEach>   
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </c:forEach>
+    <br/>
+    <c:forEach items="${project.stages}" var="stage">
+        <div class="stage worked">
+            <div class="info" style="z-index:1;">
+                <span>${stage.name}</span>             
+
+
+                <c:forEach items="${stage.process}" var="process">
+                    <c:forEach items="${process.outputList}" var="out">
+
+                        <p style="max-width:300px;">-${out}</p>
+
+                    </c:forEach>             
+                </c:forEach>                  
+            </div>      
         </div>
     </c:forEach>
 
@@ -55,8 +72,58 @@
         });
 
         $(function() {
-            $('.stage_process').attr('title', $('.outs').remove().html())
-            $(document).tooltip();
+            var isTooltipOpened = false;
+            $.widget("custom.tooltipX", $.ui.tooltip, {
+                options: {
+                    autoShow: true,
+                    autoHide: true
+                },
+                _create: function() {
+                    this._super();
+                    if (!this.options.autoShow) {
+                        this._off(this.element, "mouseover focusin");
+                    }
+                },
+                _open: function(event, target, content) {
+                    this._superApply(arguments);
+
+                    if (!this.options.autoHide) {
+                        this._off(target, "mouseleave focusout");
+                    }
+                }
+            });
+
+            $('.stage_process').each(function() {
+                $(this).attr('title', $(".outs").remove().html());
+            });
+            $('.stage_process').tooltipX({
+                autoHide: false,
+                autoShow: false
+            });
+            tmp = true;
+            $(".stage_process").click(function()
+            {
+
+                if (tmp)
+                {
+                    $(this).tooltipX("open");
+                    $(".slider-assets").on("slidestart", function(event, ui) {
+                        $(ui.handle).css("z-index", "1082");
+                    });
+
+                    $(".slider-assets").on("slidestop", function(event, ui) {
+                        $(ui.handle).css("z-index", "1080");
+                    });
+                    tmp = false;
+                }
+                else {
+                    $(this).tooltipX("close");
+                    tmp = true;
+                }
+
+
+            });
+
         });
     </script>
     <style>

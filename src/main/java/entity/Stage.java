@@ -1,16 +1,17 @@
 package entity;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import java.util.List;
 import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -32,6 +33,9 @@ public class Stage {
     @JoinColumn(name = "project_id")
     Project project;
 
+    
+    @Transient
+    private List<String> outputs;
     public Integer getStage_id() {
         return stage_id;
     }
@@ -63,6 +67,15 @@ public class Stage {
     public void setProject(Project project) {
         this.project = project;
     }
+    
+    public List<String> getOutputs() {
+        return outputs;
+    }
+
+    public void setOutputs(List<String> outputs) {
+        this.outputs = outputs;
+    }
+    
 
    
 }
