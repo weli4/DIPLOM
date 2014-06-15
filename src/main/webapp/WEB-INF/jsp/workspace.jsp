@@ -989,7 +989,7 @@
                 url: "result?" + stages + stageArray,
                 async: false,
                 success: function(response) {
-                    $(".row-fill").replaceWith($(response).find(".row-fill"))
+                   document.location.href = 'http://localhost:8084/DIPLOM/result';
                 }
             });
         })

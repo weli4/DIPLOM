@@ -84,8 +84,12 @@ public class TestController {
             return new ModelAndView("login");
         }
         ModelAndView model = new ModelAndView("result");
-        service.addProject(prj);
-        prj=service.getProject(curUser.getProject_id());
+        if (prj != null) {
+            prj.setName(curUser.getUsername());
+            prj.setProject_id(curUser.getProject_id());
+            service.updateProject(prj);
+        }
+        prj = service.getProject(curUser.getProject_id());
         for (int i = 0; i < prj.getStages().size(); i++) {
             Stage stage = prj.getStages().get(i);
             stage.setOutputs((List) XLSParser.init("E://" + (i + 1) + ".xls").getStageOutputs());
