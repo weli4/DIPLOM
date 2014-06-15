@@ -2,6 +2,7 @@ package controller;
 
 import entity.Process;
 import entity.Project;
+import entity.RandomEntity;
 import entity.Stage;
 import entity.User;
 import java.util.ArrayList;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import persist.ProcessDao;
+import persist.ProjectDao;
 import persist.UserDao;
 import service.DBServiceImpl;
 import xlsparser.XLSParser;
@@ -33,8 +36,11 @@ public class TestController {
             return new ModelAndView("login");
         }
         ModelAndView model = new ModelAndView("test");
-
-        //service.addProject(RandomEntity.getRandomProject(3, 5));
+        //System.out.println("ddd:"+new ProjectDao().addId(null));
+        Project pr = RandomEntity.getRandomProject(3, 5);
+        System.out.println("id 1:"+pr.getProject_id());
+        service.addProject(pr);
+        System.out.println("id 2:"+pr.getProject_id());
         List<Project> projects = service.getAllProjects();
 
         //for (Project prj : projects) {
@@ -47,7 +53,7 @@ public class TestController {
         //     }
         // }
         //}
-        HashMap map = XLSParser.init("E://1.xls").getProcessToStageOut();
+        HashMap map = XLSParser.init("D://1.xls").getProcessToStageOut();
         //service.deleteProject(projects.get(0).getProject_id());
         /*
          projects = service.getAllProjects(); 
@@ -84,8 +90,8 @@ public class TestController {
         service.addProject(prj);
         for (int i = 0; i < prj.getStages().size(); i++) {
             Stage stage = prj.getStages().get(i);
-            stage.setOutputs((List)XLSParser.init("E://" + (i + 1) + ".xls").getStageOutputs());
-            HashMap map = XLSParser.init("E://" + (i + 1) + ".xls").getProcessToStageOutAsList();          
+            stage.setOutputs((List)XLSParser.init("D://" + (i + 1) + ".xls").getStageOutputs());
+            HashMap map = XLSParser.init("D://" + (i + 1) + ".xls").getProcessToStageOutAsList();          
             for (int j = 0; j < stage.getProcess().size(); j++) {
                 Process process = stage.getProcess().get(j);
 
@@ -114,7 +120,7 @@ public class TestController {
         }
         curUser = user;
         ModelAndView model=new ModelAndView("workspace");
-        TreeMap<String, ArrayList<Process>> processes = XLSParser.init("E://1.xls").getProcGroups();
+        TreeMap<String, ArrayList<Process>> processes = XLSParser.init("D://1.xls").getProcGroups();
         model.addObject("processes", processes);
         model.addObject("user", curUser);
         return model;

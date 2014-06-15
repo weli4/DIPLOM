@@ -10,6 +10,24 @@ import util.HibernateUtil;
 
 public class ProjectDao extends AbstractDAO<Project> {
 
+    @Override
+    public void add(Project object) {
+        Session session = null;
+        try {
+            session = HibernateUtil.getSessionFactory().openSession();
+            session.beginTransaction();
+            session.save(object);
+            session.getTransaction().commit();
+            session.update(object);  
+        } catch (Exception e) {
+            System.err.println(e);
+        } finally {
+            if (session != null && session.isOpen()) {
+                session.close();
+            }
+        }
+    }
+
     public Project getById(Integer id) {
         Session session = null;
         List projects = new ArrayList<Stage>();
