@@ -7,10 +7,12 @@ import entity.User;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TreeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import persist.UserDao;
 import service.DBServiceImpl;
@@ -68,24 +70,22 @@ public class TestController {
             return new ModelAndView("login");
         }
         ModelAndView model = new ModelAndView("workspace");
-        XLSParser.init("D://1.xls").printMe();
-        HashMap map = XLSParser.init("D://1.xls").getOuts();
-        ArrayList<entity.Process> processes = XLSParser.init("D://1.xls").getProcesses();
-        model.addObject("processes", map);
+        
+       
+        TreeMap<String, ArrayList<Process>> processes = XLSParser.init("D://1.xls").getProcGroups();
+        model.addObject("processes", processes);
         model.addObject("user", curUser);
         return model;
     }
 
     @RequestMapping("/result")
-    public ModelAndView result() {
+    public ModelAndView result(Project prj) {        
         ModelAndView model = new ModelAndView("result");
-        Project prj = service.getProject(21);
-
+        service.addProject(prj);
         for (int i = 0; i < prj.getStages().size(); i++) {
             Stage stage = prj.getStages().get(i);
             stage.setOutputs((List)XLSParser.init("E://" + (i + 1) + ".xls").getStageOutputs());
-            HashMap map = XLSParser.init("E://" + (i + 1) + ".xls").getProcessToStageOutAsList();
-          
+            HashMap map = XLSParser.init("E://" + (i + 1) + ".xls").getProcessToStageOutAsList();          
             for (int j = 0; j < stage.getProcess().size(); j++) {
                 Process process = stage.getProcess().get(j);
 
@@ -113,7 +113,11 @@ public class TestController {
             return new ModelAndView("login");
         }
         curUser = user;
-        return new ModelAndView("workspace");
+        ModelAndView model=new ModelAndView("workspace");
+        TreeMap<String, ArrayList<Process>> processes = XLSParser.init("E://1.xls").getProcGroups();
+        model.addObject("processes", processes);
+        model.addObject("user", curUser);
+        return model;
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
