@@ -76,8 +76,7 @@ public class TestController {
             return new ModelAndView("login");
         }
         ModelAndView model = new ModelAndView("workspace");
-        
-       
+
         TreeMap<String, ArrayList<Process>> processes = XLSParser.init("D://1.xls").getProcGroups();
         model.addObject("processes", processes);
         model.addObject("user", curUser);
@@ -85,9 +84,18 @@ public class TestController {
     }
 
     @RequestMapping("/result")
-    public ModelAndView result(Project prj) {        
+    public ModelAndView result(Project prj) {
+        if (curUser == null) {
+            System.out.println("workspace: login failed");
+            return new ModelAndView("login");
+        }
         ModelAndView model = new ModelAndView("result");
-        service.addProject(prj);
+        if (prj != null) {
+            prj.setName(curUser.getUsername());
+            prj.setProject_id(curUser.getProject_id());
+            service.updateProject(prj);
+        }
+        prj = service.getProject(curUser.getProject_id());
         for (int i = 0; i < prj.getStages().size(); i++) {
             Stage stage = prj.getStages().get(i);
             stage.setOutputs((List)XLSParser.init("D://" + (i + 1) + ".xls").getStageOutputs());
@@ -97,16 +105,16 @@ public class TestController {
 
                 if (map.containsKey(process.getName())) {
                     process.setT(true);
-                    process.setOutputList((List)map.get(process.getName()));
+                    process.setOutputList((List) map.get(process.getName()));
                 } else {
                     process.setT(false);
                 }
             }
-            
+
         }
-        
+
         model.addObject("project", prj);
-        
+
         return model;
     }
 
