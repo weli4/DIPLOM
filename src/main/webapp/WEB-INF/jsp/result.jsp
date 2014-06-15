@@ -94,7 +94,7 @@
             });
 
             $('.stage_process').each(function() {
-                $(this).attr('title', $(".outs").remove().html());
+                $(this).attr('title', $(this).find(".outs").remove().html());
             });
             $('.stage_process').tooltipX({
                 autoHide: false,

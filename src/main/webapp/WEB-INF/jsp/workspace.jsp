@@ -974,8 +974,9 @@
             $('.stage_name').each(function() {
                 var processes = "";
                 stages = stages + "stages[" + i + "].name=" + $(this).html() + "&";
+                  j = 0;
                 $(this).parent().find(".process_name").each(function() {
-                    j = 0;
+                  
                     stageArray = stageArray + "stages[" + i + "].process[" + j + "].name=" + $(this).html() + "&";
                     processes = processes + $(this).html() + ";";
                     j++
