@@ -18,6 +18,7 @@ public class User {
     
     String username;
     String password;
+    Integer project_id;
     int priveleges; //0 - user, 1 - developer
 
     public Integer getId() {
@@ -51,5 +52,12 @@ public class User {
     public void setPriveleges(int priveleges) {
         this.priveleges = priveleges;
     }
-    
+
+    public Integer getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(Integer project_id) {
+        this.project_id = project_id;
+    }
 }
