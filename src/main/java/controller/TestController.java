@@ -70,8 +70,7 @@ public class TestController {
             return new ModelAndView("login");
         }
         ModelAndView model = new ModelAndView("workspace");
-        
-       
+
         TreeMap<String, ArrayList<Process>> processes = XLSParser.init("D://1.xls").getProcGroups();
         model.addObject("processes", processes);
         model.addObject("user", curUser);
@@ -79,28 +78,33 @@ public class TestController {
     }
 
     @RequestMapping("/result")
-    public ModelAndView result(Project prj) {        
+    public ModelAndView result(Project prj) {
+        if (curUser == null) {
+            System.out.println("workspace: login failed");
+            return new ModelAndView("login");
+        }
         ModelAndView model = new ModelAndView("result");
         service.addProject(prj);
+        prj=service.getProject(curUser.getProject_id());
         for (int i = 0; i < prj.getStages().size(); i++) {
             Stage stage = prj.getStages().get(i);
-            stage.setOutputs((List)XLSParser.init("E://" + (i + 1) + ".xls").getStageOutputs());
-            HashMap map = XLSParser.init("E://" + (i + 1) + ".xls").getProcessToStageOutAsList();          
+            stage.setOutputs((List) XLSParser.init("E://" + (i + 1) + ".xls").getStageOutputs());
+            HashMap map = XLSParser.init("E://" + (i + 1) + ".xls").getProcessToStageOutAsList();
             for (int j = 0; j < stage.getProcess().size(); j++) {
                 Process process = stage.getProcess().get(j);
 
                 if (map.containsKey(process.getName())) {
                     process.setT(true);
-                    process.setOutputList((List)map.get(process.getName()));
+                    process.setOutputList((List) map.get(process.getName()));
                 } else {
                     process.setT(false);
                 }
             }
-            
+
         }
-        
+
         model.addObject("project", prj);
-        
+
         return model;
     }
 
@@ -113,7 +117,7 @@ public class TestController {
             return new ModelAndView("login");
         }
         curUser = user;
-        ModelAndView model=new ModelAndView("workspace");
+        ModelAndView model = new ModelAndView("workspace");
         TreeMap<String, ArrayList<Process>> processes = XLSParser.init("E://1.xls").getProcGroups();
         model.addObject("processes", processes);
         model.addObject("user", curUser);
