@@ -5,6 +5,7 @@ import entity.Project;
 import entity.RandomEntity;
 import entity.Stage;
 import entity.User;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.support.RequestContext;
 import persist.ProcessDao;
 import persist.ProjectDao;
 import persist.UserDao;
@@ -39,9 +41,9 @@ public class TestController {
         ModelAndView model = new ModelAndView("test");
         //System.out.println("ddd:"+new ProjectDao().addId(null));
         Project pr = RandomEntity.getRandomProject(3, 5);
-        System.out.println("id 1:"+pr.getProject_id());
+        System.out.println("id 1:" + pr.getProject_id());
         service.addProject(pr);
-        System.out.println("id 2:"+pr.getProject_id());
+        System.out.println("id 2:" + pr.getProject_id());
         List<Project> projects = service.getAllProjects();
 
         //for (Project prj : projects) {
@@ -54,7 +56,8 @@ public class TestController {
         //     }
         // }
         //}
-        HashMap map = XLSParser.init("D://1.xls").getProcessToStageOut();
+
+        HashMap map = XLSParser.init(getResourcesPath()+"/xls/1.xls").getProcessToStageOut();
         //service.deleteProject(projects.get(0).getProject_id());
         /*
          projects = service.getAllProjects(); 
@@ -78,7 +81,7 @@ public class TestController {
         }
         ModelAndView model = new ModelAndView("workspace");
 
-        TreeMap<String, ArrayList<Process>> processes = XLSParser.init("D://1.xls").getProcGroups();
+        TreeMap<String, ArrayList<Process>> processes = XLSParser.init(getResourcesPath()+"/xls/1.xls").getProcGroups();
         model.addObject("processes", processes);
         model.addObject("user", curUser);
         return model;
@@ -93,18 +96,18 @@ public class TestController {
         ModelAndView model = new ModelAndView("result");
         if (prj.getStages() != null) {
             prj.setName(curUser.getUsername());
-            prj.setDescription(curUser.getUsername()+new Date());
+            prj.setDescription(curUser.getUsername() + new Date());
             prj.setProject_id(curUser.getProject_id());
             service.addProject(prj);
             new UserDao().delete(curUser);
             curUser.setProject_id(prj.getProject_id());
-            new UserDao().add(curUser); 
-        }              
+            new UserDao().add(curUser);
+        }
         prj = service.getProject(curUser.getProject_id());
         for (int i = 0; i < prj.getStages().size(); i++) {
             Stage stage = prj.getStages().get(i);
-            stage.setOutputs((List)XLSParser.init("D://" + (i + 1) + ".xls").getStageOutputs());
-            HashMap map = XLSParser.init("D://" + (i + 1) + ".xls").getProcessToStageOutAsList();          
+            stage.setOutputs((List) XLSParser.init(getResourcesPath()+"/xls/" + (i + 1) + ".xls").getStageOutputs());
+            HashMap map = XLSParser.init(getResourcesPath()+"/xls/" + (i + 1) + ".xls").getProcessToStageOutAsList();
             for (int j = 0; j < stage.getProcess().size(); j++) {
                 Process process = stage.getProcess().get(j);
 
@@ -132,8 +135,8 @@ public class TestController {
             return new ModelAndView("login");
         }
         curUser = user;
-        ModelAndView model=new ModelAndView("workspace");
-        TreeMap<String, ArrayList<Process>> processes = XLSParser.init("D://1.xls").getProcGroups();
+        ModelAndView model = new ModelAndView("workspace");
+        TreeMap<String, ArrayList<Process>> processes = XLSParser.init(getResourcesPath()+"/xls/1.xls").getProcGroups();
         model.addObject("processes", processes);
         model.addObject("user", curUser);
         return model;
@@ -143,5 +146,13 @@ public class TestController {
     public ModelAndView logout() {
         curUser = null;
         return new ModelAndView("login");
+    }
+    
+    private String getResourcesPath() {
+        String filePath = "";
+        URL url = TestController.class.getResource("TestController.class");
+        String className = url.getFile();
+        filePath = className.substring(0, className.indexOf("WEB-INF") + 7);
+        return filePath;
     }
 }
